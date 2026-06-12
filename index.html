@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="nb" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorda — Automatisering for små og mellomstore bedrifter</title>
+  <meta name="description" content="Vorda hjelper små og mellomstore bedrifter med å automatisere gjentagende oppgaver — slik at dere kan bruke tiden på kunder, ikke administrasjon.">
+  <link rel="icon" type="image/png" href="Brand_assets/vorda_ikon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            vorda: {
+              900: '#16263B',
+              800: '#1E4E8C',
+              500: '#3E76BF',
+              300: '#7EAEE3',
+              100: '#E8F0FA',
+              50:  '#F4F8FC',
+            },
+            ink: '#16263B',
+            muted: '#6B7280',
+          },
+          fontFamily: {
+            display: ['"Schibsted Grotesk"', 'system-ui', 'sans-serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; color: #16263B; }
+
+    .display-tight { letter-spacing: -0.03em; }
+    .body-relaxed { line-height: 1.7; }
+
+    /* Layered, brand-tinted shadows */
+    .shadow-card {
+      box-shadow:
+        0 1px 2px rgba(22, 38, 59, 0.04),
+        0 4px 12px rgba(30, 78, 140, 0.06),
+        0 12px 32px rgba(30, 78, 140, 0.07);
+    }
+    .shadow-card-hover {
+      box-shadow:
+        0 2px 4px rgba(22, 38, 59, 0.05),
+        0 8px 20px rgba(30, 78, 140, 0.10),
+        0 24px 48px rgba(30, 78, 140, 0.12);
+    }
+    .shadow-float {
+      box-shadow:
+        0 2px 6px rgba(22, 38, 59, 0.06),
+        0 12px 28px rgba(30, 78, 140, 0.12),
+        0 32px 64px rgba(30, 78, 140, 0.14);
+    }
+    .shadow-btn {
+      box-shadow:
+        0 1px 2px rgba(22, 38, 59, 0.10),
+        0 4px 12px rgba(30, 78, 140, 0.25),
+        0 10px 28px rgba(30, 78, 140, 0.22);
+    }
+
+    /* Hero: layered radial gradients + grain */
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 70% -10%, rgba(126, 174, 227, 0.28), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 10% 10%, rgba(62, 118, 191, 0.12), transparent 55%),
+        radial-gradient(ellipse 90% 70% at 50% 110%, rgba(232, 240, 250, 0.9), transparent 70%),
+        #FDFEFF;
+    }
+    .grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.09 0 0 0 0 0.15 0 0 0 0 0.23 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .contact-bg {
+      background:
+        radial-gradient(ellipse 70% 80% at 80% 0%, rgba(62, 118, 191, 0.55), transparent 60%),
+        radial-gradient(ellipse 60% 70% at 5% 100%, rgba(126, 174, 227, 0.35), transparent 60%),
+        #1E4E8C;
+    }
+
+    /* Reveal on scroll — transform & opacity only, spring-ish ease */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    .nav-link {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 100%;
+      bottom: -4px;
+      height: 2px;
+      background: #3E76BF;
+      transition: right 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .nav-link:hover::after, .nav-link:focus-visible::after { right: 0; }
+
+    .btn-primary {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); background-color: #255CA3; }
+    .btn-primary:active { transform: translateY(0) scale(0.98); }
+    .btn-primary:focus-visible { outline: 3px solid #7EAEE3; outline-offset: 3px; }
+
+    .btn-ghost {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-ghost:hover { transform: translateY(-2px); background-color: #F4F8FC; border-color: #7EAEE3; }
+    .btn-ghost:active { transform: translateY(0) scale(0.98); }
+    .btn-ghost:focus-visible { outline: 3px solid #7EAEE3; outline-offset: 3px; }
+
+    .card-lift {
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .card-lift:hover { transform: translateY(-4px); }
+  </style>
+</head>
+<body class="font-body bg-white text-ink antialiased">
+
+  <!-- ============ NAV ============ -->
+  <header id="site-nav" class="fixed top-0 inset-x-0 z-50 transition-colors duration-300">
+    <nav class="mx-auto max-w-6xl px-5 sm:px-8">
+      <div class="flex items-center justify-between h-[72px]">
+        <a href="#" class="flex items-center shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-vorda-300" aria-label="Vorda — til toppen">
+          <img src="Brand_assets/vorda_logo.svg" alt="Vorda Automasjon" class="h-[72px] w-auto -my-3">
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#om-oss" class="nav-link text-[15px] font-medium text-muted hover:text-vorda-800">Om oss</a>
+          <a href="#tjenester" class="nav-link text-[15px] font-medium text-muted hover:text-vorda-800">Tjenester</a>
+          <a href="#slik-jobber-vi" class="nav-link text-[15px] font-medium text-muted hover:text-vorda-800">Slik jobber vi</a>
+          <a href="#kontakt" class="btn-primary shadow-btn inline-flex items-center gap-2 rounded-full bg-vorda-800 px-5 py-2.5 text-[15px] font-semibold text-white">
+            Ta kontakt
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
+          </a>
+        </div>
+        <button id="menu-btn" class="md:hidden p-2 rounded-lg text-vorda-900 hover:bg-vorda-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-vorda-300 active:scale-95 transition-transform duration-150" aria-label="Åpne meny" aria-expanded="false">
+          <svg id="icon-open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="icon-close" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="md:hidden hidden pb-5">
+        <div class="flex flex-col gap-1 rounded-2xl bg-white shadow-card border border-vorda-100 p-3">
+          <a href="#om-oss" class="mobile-link rounded-xl px-4 py-3 font-medium text-vorda-900 hover:bg-vorda-50 active:bg-vorda-100 transition-colors duration-150">Om oss</a>
+          <a href="#tjenester" class="mobile-link rounded-xl px-4 py-3 font-medium text-vorda-900 hover:bg-vorda-50 active:bg-vorda-100 transition-colors duration-150">Tjenester</a>
+          <a href="#slik-jobber-vi" class="mobile-link rounded-xl px-4 py-3 font-medium text-vorda-900 hover:bg-vorda-50 active:bg-vorda-100 transition-colors duration-150">Slik jobber vi</a>
+          <a href="#kontakt" class="mobile-link mt-1 rounded-xl bg-vorda-800 px-4 py-3 text-center font-semibold text-white hover:bg-vorda-500 active:scale-[0.99] transition-colors duration-150">Ta kontakt</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero-bg relative overflow-hidden pt-[72px]">
+      <div class="grain"></div>
+      <div class="relative mx-auto max-w-6xl px-5 sm:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
+        <div class="grid lg:grid-cols-[7fr_5fr] gap-12 lg:gap-8 items-center">
+          <div class="max-w-2xl">
+            <p class="reveal inline-flex items-center gap-2 rounded-full border border-vorda-300/50 bg-white/70 px-4 py-1.5 text-[13px] font-semibold text-vorda-800 backdrop-blur-sm">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="15" y="6" width="18" height="10" rx="5" fill="#7EAEE3"/>
+                <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#3E76BF"/>
+                <rect x="4" y="35" width="40" height="12" rx="6" fill="#1E4E8C"/>
+              </svg>
+              Automatisering for norske bedrifter
+            </p>
+            <h1 class="reveal display-tight mt-6 font-display text-[40px] leading-[1.08] font-bold text-vorda-900 sm:text-[56px] lg:text-[64px]" style="transition-delay: 80ms;">
+              Mer tid til det som faktisk <span class="text-vorda-800">skaper verdi</span>
+            </h1>
+            <p class="reveal body-relaxed mt-6 max-w-xl text-[17px] sm:text-lg text-muted" style="transition-delay: 160ms;">
+              Vorda hjelper små og mellomstore bedrifter med å automatisere gjentagende oppgaver — slik at dere kan bruke tiden på kunder, ikke administrasjon.
+            </p>
+            <div class="reveal mt-9 flex flex-wrap items-center gap-4" style="transition-delay: 240ms;">
+              <a href="#kontakt" class="btn-primary shadow-btn inline-flex items-center gap-2 rounded-full bg-vorda-800 px-7 py-3.5 text-base font-semibold text-white">
+                Ta kontakt
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
+              </a>
+              <a href="#slik-jobber-vi" class="btn-ghost inline-flex items-center rounded-full border border-vorda-100 bg-white px-7 py-3.5 text-base font-semibold text-vorda-800">
+                Slik jobber vi
+              </a>
+            </div>
+            <p class="reveal mt-6 text-sm text-muted" style="transition-delay: 320ms;">Første samtale er alltid uforpliktende og gratis.</p>
+          </div>
+
+          <!-- Varde-illustrasjon -->
+          <div class="reveal hidden lg:flex justify-center" style="transition-delay: 200ms;">
+            <div class="relative">
+              <div class="absolute -inset-10 rounded-full bg-vorda-300/20 blur-3xl" aria-hidden="true"></div>
+              <svg class="relative w-[300px] h-[340px]" viewBox="0 0 300 340" fill="none" aria-hidden="true">
+                <ellipse cx="150" cy="312" rx="120" ry="16" fill="#1E4E8C" opacity="0.08"/>
+                <rect x="55" y="244" width="190" height="60" rx="30" fill="#1E4E8C"/>
+                <rect x="80" y="170" width="140" height="56" rx="28" fill="#3E76BF"/>
+                <rect x="105" y="102" width="90" height="50" rx="25" fill="#7EAEE3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OM OSS ============ -->
+    <section id="om-oss" class="scroll-mt-[72px] py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20">
+          <div class="reveal">
+            <p class="text-sm font-semibold uppercase tracking-[0.14em] text-vorda-500">Om oss</p>
+            <h2 class="display-tight mt-3 font-display text-3xl sm:text-4xl font-bold text-vorda-900">
+              Vi tar oss av oppgavene som gjentar seg
+            </h2>
+            <!-- Om navnet -->
+            <div class="card-lift shadow-card mt-10 rounded-3xl border border-vorda-100 bg-vorda-50 p-7 sm:p-8">
+              <svg class="w-9 h-9" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="15" y="6" width="18" height="10" rx="5" fill="#7EAEE3"/>
+                <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#3E76BF"/>
+                <rect x="4" y="35" width="40" height="12" rx="6" fill="#1E4E8C"/>
+              </svg>
+              <h3 class="mt-4 font-display text-lg font-bold text-vorda-900">Om navnet</h3>
+              <p class="body-relaxed mt-2 text-[15px] text-muted">
+                Vorda kommer fra det norrøne ordet «vǫrðr» — en vokter, en som våker. Det er også et nikk til varden: steinrøysene som i århundrer har vist vei i norske fjell. Det er nøyaktig det vi vil være for kundene våre — noe som står støtt, passer på, og viser vei.
+              </p>
+            </div>
+          </div>
+          <div class="reveal space-y-6 body-relaxed text-[17px] text-muted lg:pt-12" style="transition-delay: 120ms;">
+            <p>
+              Vorda er startet av to studenter innen ledelse, markedsføring og innovasjon med base i Kongsberg. Vi så at mange norske bedrifter bruker timevis hver uke på oppgaver som gjentar seg — innboksen som må sorteres, dokumenter som må flyttes, informasjon som må tastes inn to steder.
+            </p>
+            <p>
+              Samtidig har verktøyene for å automatisere dette blitt både bedre og rimeligere enn noen gang. Problemet er at de fleste bedrifter verken har tid eller lyst til å sette seg inn i dem.
+            </p>
+            <p class="font-medium text-vorda-900">
+              Det er der vi kommer inn. Vi setter oss inn i hvordan dere jobber, finner oppgavene som stjeler mest tid, og bygger automatiseringer som tar seg av dem — stille og pålitelig, i bakgrunnen, hver dag.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TJENESTER ============ -->
+    <section id="tjenester" class="scroll-mt-[72px] relative overflow-hidden bg-vorda-50 py-20 sm:py-28">
+      <div class="grain" style="opacity: 0.35;"></div>
+      <div class="relative mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="reveal max-w-2xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.14em] text-vorda-500">Tjenester</p>
+          <h2 class="display-tight mt-3 font-display text-3xl sm:text-4xl font-bold text-vorda-900">
+            Fra kartlegging til løsninger som bare fungerer
+          </h2>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <!-- Kartlegging -->
+          <div class="reveal card-lift shadow-card rounded-3xl border border-vorda-100 bg-white p-7 sm:p-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-vorda-100">
+              <svg class="w-6 h-6 text-vorda-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Kartlegging</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              Vi starter alltid med å forstå hverdagen deres. Gjennom en kort kartlegging finner vi de gjentagende oppgavene som koster mest tid, og vurderer hvilke som egner seg for automatisering.
+            </p>
+          </div>
+          <!-- Automatisering -->
+          <div class="reveal card-lift shadow-card rounded-3xl border border-vorda-100 bg-white p-7 sm:p-8" style="transition-delay: 100ms;">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-vorda-100">
+              <svg class="w-6 h-6 text-vorda-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 3L5 13h5l-1 8 8-10h-5l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Automatisering</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              Vi bygger skreddersydde automatiseringer tilpasset deres systemer og arbeidsflyt — alt fra e-posthåndtering og dokumentbehandling til dataoverføring mellom systemer og automatiske rapporter. Vi bruker moderne AI-verktøy der det gir mening.
+            </p>
+          </div>
+          <!-- Drift og oppfølging -->
+          <div class="reveal card-lift shadow-card rounded-3xl border border-vorda-100 bg-white p-7 sm:p-8" style="transition-delay: 200ms;">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-vorda-100">
+              <svg class="w-6 h-6 text-vorda-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Drift og oppfølging</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              En automatisering er ikke et engangsprosjekt. Vi følger opp, justerer og videreutvikler løsningene etter hvert som behovene deres endrer seg, slik at alt bare fungerer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SLIK JOBBER VI ============ -->
+    <section id="slik-jobber-vi" class="scroll-mt-[72px] py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="reveal max-w-2xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.14em] text-vorda-500">Slik jobber vi</p>
+          <h2 class="display-tight mt-3 font-display text-3xl sm:text-4xl font-bold text-vorda-900">
+            Tre steg fra prat til spart tid
+          </h2>
+        </div>
+        <ol class="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+          <li class="reveal relative">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-vorda-800 font-display text-lg font-bold text-white shadow-btn">1</span>
+              <span class="hidden md:block h-px flex-1 bg-gradient-to-r from-vorda-300 to-transparent" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Kartleggingssamtale</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              En uforpliktende prat der vi går gjennom hverdagen deres og identifiserer oppgaver som kan automatiseres. Helt gratis.
+            </p>
+          </li>
+          <li class="reveal relative" style="transition-delay: 100ms;">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-vorda-500 font-display text-lg font-bold text-white shadow-btn">2</span>
+              <span class="hidden md:block h-px flex-1 bg-gradient-to-r from-vorda-300 to-transparent" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Forslag og bygging</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              Dere får et konkret forslag med fast pris. Sier dere ja, bygger vi løsningen og tester den grundig sammen med dere før den settes i drift.
+            </p>
+          </li>
+          <li class="reveal relative" style="transition-delay: 200ms;">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-vorda-300 font-display text-lg font-bold text-vorda-900 shadow-btn">3</span>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-bold text-vorda-900">Løpende verdi</h3>
+            <p class="body-relaxed mt-3 text-[15px] text-muted">
+              Automatiseringen jobber for dere hver dag. Vi følger opp jevnlig og er tilgjengelige når dere trenger justeringer eller har nye ideer.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ HVORFOR VORDA ============ -->
+    <section class="relative overflow-hidden bg-vorda-50 py-20 sm:py-28">
+      <div class="grain" style="opacity: 0.35;"></div>
+      <div class="relative mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
+          <div class="reveal lg:sticky lg:top-28">
+            <p class="text-sm font-semibold uppercase tracking-[0.14em] text-vorda-500">Hvorfor Vorda</p>
+            <h2 class="display-tight mt-3 font-display text-3xl sm:text-4xl font-bold text-vorda-900">
+              En partner som står støtt
+            </h2>
+            <p class="body-relaxed mt-5 text-[17px] text-muted">
+              Som varden i fjellet: tilgjengelig, pålitelig og til å stole på — dag etter dag.
+            </p>
+          </div>
+          <div class="space-y-5">
+            <div class="reveal card-lift shadow-card flex gap-5 rounded-3xl border border-vorda-100 bg-white p-7">
+              <svg class="mt-1 h-9 w-9 shrink-0" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="15" y="6" width="18" height="10" rx="5" fill="#7EAEE3"/>
+                <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#3E76BF"/>
+                <rect x="4" y="35" width="40" height="12" rx="6" fill="#1E4E8C"/>
+              </svg>
+              <div>
+                <h3 class="font-display text-lg font-bold text-vorda-900">Lokale</h3>
+                <p class="body-relaxed mt-1.5 text-[15px] text-muted">
+                  Vi er fra Kongsberg-området og jobber tett med bedrifter i Buskerud. Dere får en partner som er tilgjengelig, ikke et supportkøsystem.
+                </p>
+              </div>
+            </div>
+            <div class="reveal card-lift shadow-card flex gap-5 rounded-3xl border border-vorda-100 bg-white p-7" style="transition-delay: 100ms;">
+              <svg class="mt-1 h-9 w-9 shrink-0" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="15" y="6" width="18" height="10" rx="5" fill="#7EAEE3"/>
+                <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#3E76BF"/>
+                <rect x="4" y="35" width="40" height="12" rx="6" fill="#1E4E8C"/>
+              </svg>
+              <div>
+                <h3 class="font-display text-lg font-bold text-vorda-900">Konkrete</h3>
+                <p class="body-relaxed mt-1.5 text-[15px] text-muted">
+                  Vi snakker ikke teknologi — vi snakker spart tid. Hver løsning vi bygger skal kunne måles i timer frigjort per uke.
+                </p>
+              </div>
+            </div>
+            <div class="reveal card-lift shadow-card flex gap-5 rounded-3xl border border-vorda-100 bg-white p-7" style="transition-delay: 200ms;">
+              <svg class="mt-1 h-9 w-9 shrink-0" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <rect x="15" y="6" width="18" height="10" rx="5" fill="#7EAEE3"/>
+                <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#3E76BF"/>
+                <rect x="4" y="35" width="40" height="12" rx="6" fill="#1E4E8C"/>
+              </svg>
+              <div>
+                <h3 class="font-display text-lg font-bold text-vorda-900">Lave terskler</h3>
+                <p class="body-relaxed mt-1.5 text-[15px] text-muted">
+                  Ingen lange bindinger eller store forskuddsbetalinger. Vi starter gjerne i det små og beviser verdien først.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ KONTAKT ============ -->
+    <section id="kontakt" class="scroll-mt-[72px] py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="contact-bg reveal relative overflow-hidden rounded-[2.5rem] shadow-float">
+          <div class="grain" style="opacity: 0.4;"></div>
+          <div class="relative px-7 py-14 sm:px-14 sm:py-20 lg:px-20 text-center">
+            <svg class="mx-auto w-11 h-11" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <rect x="15" y="6" width="18" height="10" rx="5" fill="#FFFFFF" opacity="0.95"/>
+              <rect x="9" y="20" width="30" height="11" rx="5.5" fill="#FFFFFF" opacity="0.75"/>
+              <rect x="4" y="35" width="40" height="12" rx="6" fill="#FFFFFF" opacity="0.55"/>
+            </svg>
+            <h2 class="display-tight mt-6 font-display text-3xl sm:text-[44px] font-bold text-white">La oss ta en prat</h2>
+            <p class="body-relaxed mx-auto mt-5 max-w-xl text-[17px] text-vorda-100">
+              Lurer du på om noe i deres hverdag kan automatiseres? Send oss en melding — første samtale er alltid uforpliktende og gratis.
+            </p>
+            <div class="mt-9 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+              <a href="mailto:post@vorda.no" class="btn-primary inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-base font-semibold text-vorda-800 shadow-float hover:!bg-vorda-100">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg>
+                post@vorda.no
+              </a>
+              <a href="tel:+4700000000" class="inline-flex items-center gap-2.5 rounded-full border border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors duration-200 hover:bg-white/10 active:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.2a1 1 0 01.95.68l1.1 3.3a1 1 0 01-.27 1.06L7.6 9.4a14 14 0 007 7l1.36-1.38a1 1 0 011.06-.27l3.3 1.1a1 1 0 01.68.95V19a2 2 0 01-2 2h-1C9.7 21 3 14.3 3 6V5z"/></svg>
+                [ditt nummer]
+              </a>
+            </div>
+            <p class="mt-8 text-sm text-vorda-100/80">
+              Basert i Kongsberg, jobber med bedrifter i hele Buskerud.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-vorda-100 bg-vorda-50">
+    <div class="mx-auto max-w-6xl px-5 sm:px-8 py-10">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <img src="Brand_assets/vorda_logo.svg" alt="Vorda Automasjon" class="h-14 w-auto">
+        <p class="text-sm text-muted text-center sm:text-right">
+          Vorda AS · Org.nr: [fyll inn]<br>
+          <a href="mailto:post@vorda.no" class="hover:text-vorda-800 transition-colors duration-150 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-vorda-300">post@vorda.no</a>
+          · <a href="tel:+4700000000" class="hover:text-vorda-800 transition-colors duration-150 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-vorda-300">[ditt nummer]</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Sticky nav: solid background after scroll
+    const nav = document.getElementById('site-nav');
+    const setNav = () => {
+      if (window.scrollY > 24) {
+        nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-card', 'border-b', 'border-vorda-100');
+      } else {
+        nav.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-card', 'border-b', 'border-vorda-100');
+      }
+    };
+    setNav();
+    window.addEventListener('scroll', setNav, { passive: true });
+
+    // Mobile menu
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    const toggleMenu = (open) => {
+      menu.classList.toggle('hidden', !open);
+      iconOpen.classList.toggle('hidden', open);
+      iconClose.classList.toggle('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      if (open) nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-card', 'border-b', 'border-vorda-100');
+      else setNav();
+    };
+    btn.addEventListener('click', () => toggleMenu(menu.classList.contains('hidden')));
+    document.querySelectorAll('.mobile-link').forEach((a) => a.addEventListener('click', () => toggleMenu(false)));
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); }
+      }),
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
